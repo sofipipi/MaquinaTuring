@@ -1,0 +1,83 @@
+[gd_scene load_steps=11 format=3 uid="uid://dwakwev2ey867"]
+
+[ext_resource type="Script" uid="uid://d2qe5c81sh7pg" path="res://cajinha.gd" id="1_nq1gg"]
+[ext_resource type="Script" uid="uid://io41rufa80jg" path="res://dato.gd" id="2_ludf4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rphtw"]
+albedo_color = Color(0.9818757, 0, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rphtw"]
+size = Vector3(0.8, 0.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nq1gg"]
+size = Vector3(0.8, 0.8, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ludf4"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6aydd"]
+material = SubResource("StandardMaterial3D_ludf4")
+size = Vector3(0.8, 0.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ludf4"]
+size = Vector3(0.8, 0.8, 0.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6aydd"]
+size = Vector3(0.8, 0.8, 0.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hq2r5"]
+size = Vector3(0.8, 0.8, 0.05)
+
+[node name="StaticBody3D" type="StaticBody3D"]
+script = ExtResource("1_nq1gg")
+
+[node name="Fuera" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5060986, 0)
+use_collision = true
+material = SubResource("StandardMaterial3D_rphtw")
+
+[node name="Dentro" type="CSGBox3D" parent="Fuera"]
+operation = 2
+size = Vector3(0.8, 0.8, 1.01)
+
+[node name="Dato" type="RigidBody3D" parent="." groups=["pushable_group"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+lock_rotation = true
+script = ExtResource("2_ludf4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dato"]
+shape = SubResource("BoxShape3D_rphtw")
+
+[node name="Detectable" type="Area3D" parent="Dato"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Dato/Detectable"]
+shape = SubResource("BoxShape3D_nq1gg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Dato"]
+mesh = SubResource("BoxMesh_6aydd")
+
+[node name="Numero0" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Numero0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_ludf4")
+
+[node name="Numero1" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Numero1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.25)
+shape = SubResource("BoxShape3D_6aydd")
+
+[node name="NumeroEpisilon" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NumeroEpisilon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.25)
+shape = SubResource("BoxShape3D_hq2r5")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3857716, 0)
+pixel_size = 0.0125
+
+[connection signal="area_entered" from="Numero0" to="." method="_on_numero_0_area_entered"]
+[connection signal="area_entered" from="Numero1" to="." method="_on_numero_1_area_entered"]
+[connection signal="area_entered" from="NumeroEpisilon" to="." method="_on_numero_episilon_area_entered"]

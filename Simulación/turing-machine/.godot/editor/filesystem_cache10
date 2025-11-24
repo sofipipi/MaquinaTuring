@@ -1,0 +1,10 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1763979987
+cajinha.gd::GDScript::9087687472390280412::1763976821::0::1::::<>StaticBody3D<><>0<>0<><>::
+cajinha.tscn::PackedScene::8704063312276965602::1763979975::0::1::::<><><>0<>0<><>::uid://d2qe5c81sh7pg::::res://cajinha.gd<>uid://io41rufa80jg::::res://dato.gd
+controlador_carritos.gd::GDScript::8693480751317504420::1763976821::0::1::::<>Node3D<><>0<>0<><>::
+dato.gd::GDScript::592220185114394820::1763979419::0::1::::<>RigidBody3D<><>0<>0<><>::
+escenario.gd::GDScript::349194243460310364::1763976030::0::1::::<>Node3D<><>0<>0<><>::
+escenario.tscn::PackedScene::414158248820167985::1763976941::0::1::::<><><>0<>0<><>::uid://63n5euv4a68r::::res://personaje.gd<>uid://e8fgb74qvsga::::res://escenario.gd<>uid://dv4gmfwtq6ifc::::res://controlador_carritos.gd
+icon.svg::CompressedTexture2D::4071663078923414801::1763967704::1763967742::1::::<><><>0<>0<>ea865688cfc2ee98791ae7a99a8b98f5<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+personaje.gd::GDScript::2234499866598212063::1763979605::0::1::::<>CharacterBody3D<><>0<>0<><>::
