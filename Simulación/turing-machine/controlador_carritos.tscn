@@ -1,0 +1,182 @@
+[gd_scene load_steps=23 format=3 uid="uid://x7cjejtkwici"]
+
+[ext_resource type="Script" uid="uid://dv4gmfwtq6ifc" path="res://controlador_carritos.gd" id="1_pm4va"]
+[ext_resource type="Script" uid="uid://chwbes1d00a04" path="res://state_machine.gd" id="2_ghvwm"]
+[ext_resource type="Script" uid="uid://cysavaqbh77cj" path="res://estados/suma_q_0.gd" id="3_0d4kx"]
+[ext_resource type="Script" uid="uid://bidokrv8pq67k" path="res://estados/suma_q_1.gd" id="4_xm6ys"]
+[ext_resource type="Script" uid="uid://42ifkqyhmmut" path="res://estados/suma_q_2.gd" id="5_gp14q"]
+[ext_resource type="Script" uid="uid://dcyos0pltf55g" path="res://estados/suma_qf.gd" id="6_4i1ai"]
+[ext_resource type="Script" uid="uid://byq3akpyly724" path="res://estados/resta_q_0.gd" id="7_4ndjv"]
+[ext_resource type="Script" uid="uid://c4nnfytqogcu" path="res://estados/resta_q_1.gd" id="8_mmxf6"]
+[ext_resource type="Script" uid="uid://cnsmy734mg3mq" path="res://estados/resta_q_2.gd" id="9_vxx2h"]
+[ext_resource type="Script" uid="uid://v4rqerkwdinb" path="res://estados/resta_q_3.gd" id="10_ayr2f"]
+[ext_resource type="Script" uid="uid://bg4caejgeckfk" path="res://estados/resta_q_4.gd" id="11_haft8"]
+[ext_resource type="Script" uid="uid://bcyhe2j81vedb" path="res://estados/resta_q_5.gd" id="12_h11s5"]
+[ext_resource type="Script" uid="uid://bhmkx8dfttscm" path="res://estados/resta_qf.gd" id="13_mpxgk"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_aopi6"]
+size = Vector3(0.15, 0.5, 0.15)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kb1ak"]
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_oaxx3"]
+material = SubResource("StandardMaterial3D_kb1ak")
+size = Vector3(0.5, 0.2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_85vns"]
+size = Vector3(0.5, 0.2, 0.5)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_87ks1"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_i137q"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1ycac"]
+height = 0.1
+radius = 0.01
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ofqux"]
+top_radius = 0.01
+bottom_radius = 0.01
+height = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eels0"]
+size = Vector3(0.5, 0.2, 0.5)
+
+[node name="ControladorCarritos" type="Node3D"]
+script = ExtResource("1_pm4va")
+
+[node name="Carrito1" type="StaticBody3D" parent="."]
+
+[node name="Pata1" type="MeshInstance3D" parent="Carrito1"]
+transform = Transform3D(-0.70710665, 0.70710665, 0, -0.70710665, -0.70710665, 0, 0, 0, 1, 0.33, 0.312, 1)
+mesh = SubResource("BoxMesh_aopi6")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="Pata2" type="MeshInstance3D" parent="Carrito1"]
+transform = Transform3D(0.7071067, 0.7071067, 0, -0.7071067, 0.7071067, 0, 0, 0, 1, -0.33, 0.312, 1)
+mesh = SubResource("BoxMesh_aopi6")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Carrito1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+mesh = SubResource("BoxMesh_oaxx3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Carrito1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+shape = SubResource("BoxShape3D_85vns")
+
+[node name="Rueda2" type="MeshInstance3D" parent="Carrito1"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.551, 0.11, 1)
+mesh = SubResource("CylinderMesh_87ks1")
+skeleton = NodePath("../Rueda1")
+
+[node name="Rueda1" type="MeshInstance3D" parent="Carrito1"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.511, 0.11, 1)
+mesh = SubResource("CylinderMesh_87ks1")
+
+[node name="RayCast3D" type="RayCast3D" parent="Carrito1"]
+transform = Transform3D(1.3, 0, 0, 0, -5.6824803e-08, -1.3, 0, 1.3, -5.6824803e-08, 0, 0.5, 1)
+rotation_order = 3
+collision_mask = 2
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="PusherCaja" type="MeshInstance3D" parent="Carrito1"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.612, 0.83)
+mesh = SubResource("BoxMesh_i137q")
+skeleton = NodePath("")
+
+[node name="Pusher" type="CharacterBody3D" parent="Carrito1"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.63, 0.73)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Carrito1/Pusher"]
+shape = SubResource("CylinderShape3D_1ycac")
+
+[node name="Pusher" type="CSGMesh3D" parent="Carrito1/Pusher"]
+mesh = SubResource("CylinderMesh_ofqux")
+
+[node name="Carrito2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Carrito2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+mesh = SubResource("BoxMesh_oaxx3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Carrito2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+shape = SubResource("BoxShape3D_eels0")
+
+[node name="Pata1" type="MeshInstance3D" parent="Carrito2"]
+transform = Transform3D(-0.70710665, 0.70710665, 0, -0.70710665, -0.70710665, 0, 0, 0, 1, 0.33, 0.312, 1)
+mesh = SubResource("BoxMesh_aopi6")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="Pata2" type="MeshInstance3D" parent="Carrito2"]
+transform = Transform3D(0.7071067, 0.7071067, 0, -0.7071067, 0.7071067, 0, 0, 0, 1, -0.33, 0.312, 1)
+mesh = SubResource("BoxMesh_aopi6")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="Rueda2" type="MeshInstance3D" parent="Carrito2"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.551, 0.11, 1)
+mesh = SubResource("CylinderMesh_87ks1")
+skeleton = NodePath("../Rueda1")
+
+[node name="Rueda1" type="MeshInstance3D" parent="Carrito2"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.511, 0.11, 1)
+mesh = SubResource("CylinderMesh_87ks1")
+
+[node name="PusherCaja" type="MeshInstance3D" parent="Carrito2"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.612, 1.17)
+mesh = SubResource("BoxMesh_i137q")
+skeleton = NodePath("")
+
+[node name="Pusher" type="CharacterBody3D" parent="Carrito2"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.63, 1.27)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Carrito2/Pusher"]
+shape = SubResource("CylinderShape3D_1ycac")
+
+[node name="Pusher" type="CSGMesh3D" parent="Carrito2/Pusher"]
+mesh = SubResource("CylinderMesh_ofqux")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("parent_node")]
+script = ExtResource("2_ghvwm")
+parent_node = NodePath("..")
+
+[node name="SumaQ0" type="Node" parent="StateMachine"]
+script = ExtResource("3_0d4kx")
+
+[node name="SumaQ1" type="Node" parent="StateMachine"]
+script = ExtResource("4_xm6ys")
+
+[node name="SumaQ2" type="Node" parent="StateMachine"]
+script = ExtResource("5_gp14q")
+
+[node name="SumaQf" type="Node" parent="StateMachine"]
+script = ExtResource("6_4i1ai")
+
+[node name="RestaQ0" type="Node" parent="StateMachine"]
+script = ExtResource("7_4ndjv")
+
+[node name="RestaQ1" type="Node" parent="StateMachine"]
+script = ExtResource("8_mmxf6")
+
+[node name="RestaQ2" type="Node" parent="StateMachine"]
+script = ExtResource("9_vxx2h")
+
+[node name="RestaQ3" type="Node" parent="StateMachine"]
+script = ExtResource("10_ayr2f")
+
+[node name="RestaQ4" type="Node" parent="StateMachine"]
+script = ExtResource("11_haft8")
+
+[node name="RestaQ5" type="Node" parent="StateMachine"]
+script = ExtResource("12_h11s5")
+
+[node name="RestaQf" type="Node" parent="StateMachine"]
+script = ExtResource("13_mpxgk")

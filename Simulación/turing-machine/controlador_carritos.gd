@@ -9,6 +9,9 @@ extends Node3D
 @export var moving = false
 @export var pushing = false
 
+var current_push_tween = null
+var current_move_tween = null
+
 # Constantes importantes
 const DEFAULT_SCALE_Z = 1.0       # Escala por defecto en el eje Z
 const PUSH_DURATION = 0.5
@@ -43,6 +46,7 @@ func move_to_global_position_smoothly(target_global_position: Vector3, duration:
 	moving = true
 	# El Tween moverá el nodo desde su posición actual hasta la posición objetivo 
 	var tween = create_tween()
+	current_move_tween = tween
 	tween.tween_property(
 		self, # El nodo al que aplicamos la propiedad (self = este script)
 		"global_position", # La propiedad que queremos animar
@@ -66,7 +70,7 @@ func start_push_sequence(distance: float, pusher: CharacterBody3D, direction: fl
 	initial_scale = pusher.scale
 	var tween_extend = create_tween()
 	# === VALORES OBJETIVO ===
-	
+	current_push_tween = tween_extend
 	# 1. Escala Final: La escala Z se aumenta por la distancia de empuje.
 	var final_scale = initial_scale
 	final_scale.z = DEFAULT_SCALE_Z + distance
@@ -110,3 +114,22 @@ func start_push_sequence(distance: float, pusher: CharacterBody3D, direction: fl
 
 func _on_push_finished():
 	pushing = false
+
+func cleanup_and_free():
+	# 1. Detener el Tween de movimiento
+	if current_move_tween and current_move_tween.is_running():
+		current_move_tween.kill()
+		current_move_tween = null
+		
+	# 2. Detener el Tween de empuje
+	if current_push_tween and current_push_tween.is_running():
+		current_push_tween.kill()
+		current_push_tween = null
+
+	# Nota: Los Timers creados con await (get_tree().create_timer) 
+	# se cancelan automáticamente cuando el nodo al que está enlazado el 'await' 
+	# (en este caso, 'self') es liberado, pero es buena práctica matar el Tween.
+
+	print("Limpiando y liberando...")
+	# 3. Liberar el nodo
+	queue_free()

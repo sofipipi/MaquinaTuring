@@ -20,7 +20,7 @@ func _ready():
 	
 	# 2. Inicializar con el primer estado
 	if states.size() > 0:
-		current_state = states["RestaQ0"]
+		current_state = states[find_child(Global.tipo_automata).name]
 		current_state.enter()
 
 func _process(delta: float):
