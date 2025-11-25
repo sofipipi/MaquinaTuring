@@ -1,6 +1,9 @@
-//Actuadores Lineales
-const int forwards = 7;
-const int backwards = 6;
+// Actuadores Lineales
+const int forwards1 = 7;
+const int backwards1 = 6;
+
+const int forwards2 = 10;
+const int backwards2 = 11;
 
 //Ultrasonido
 const int Trigger = 2; 
@@ -13,9 +16,13 @@ const int distanciaBeta= 8; // epsilon en la animación
 const int distanciaUno= 2; // cantidad de unos que representan un numero entero
 const int distanciaCero= 4; // operando
 
-//Motor para el carrito
-int entradaMotor1 = 4;
-int entradaMotor2 = 5;
+// Motores para los carritos
+int entradaCarrito1Motor1 = 4;
+int entradaCarrito1Motor2 = 5;
+
+int entradaCarrito2Motor1 = 8;
+int entradaCarrito2Motor2 = 9;
+
 //booleanos
 
 bool q0=true;
@@ -28,17 +35,23 @@ bool qf=false;
 
 void setup() {
   //Actuadores Lineales (configurados con relé)
-  pinMode(forwards, OUTPUT);
-  pinMode(backwards, OUTPUT);
-
+  pinMode(forwards1, OUTPUT);
+  pinMode(backwards1, OUTPUT);
+  pinMode(forwards2, OUTPUT);
+  pinMode(backwards2, OUTPUT);
+  
   //Ultrasonido
   pinMode(Trigger, OUTPUT); //pin como salida
   pinMode(Echo, INPUT);  //pin como entrada
   digitalWrite(Trigger, LOW);//Inicializamos el pin con 0
 
   //Motor con driver L298N
-  pinMode(entradaMotor1, OUTPUT);
-  pinMode(entradaMotor2, OUTPUT);
+  pinMode(entradaCarrito1Motor1, OUTPUT);
+  pinMode(entradaCarrito1Motor2, OUTPUT);
+
+  pinMode(entradaCarrito2Motor1, OUTPUT);
+  pinMode(entradaCarrito2Motor2, OUTPUT);
+
 }
 void loop() {
  
@@ -48,58 +61,41 @@ void loop() {
   
     if(q0){
       //continua moviendose a la derecha
-      digitalWrite(entradaMotor1, HIGH);
-      digitalWrite(entradaMotor2, LOW);
+      moverMotoresDerecha();
       
     }
     else if(q1){
       //continua moviendose a la derecha
-      digitalWrite(entradaMotor1, HIGH);
-      digitalWrite(entradaMotor2, LOW);
+      moverMotoresDerecha();
       
     }
 
     else if (q2){
       //cambio de 1 a beta
       //actuador
-      digitalWrite(forwards, LOW);
-      digitalWrite(backwards, HIGH);
-      delay(500);
-      digitalWrite(forwards, HIGH);
-      digitalWrite(backwards, LOW);
-      delay(500);
-
+      activarActuador1();
+      
       //me muevo a la izquierda
-      digitalWrite(entradaMotor1, LOW);
-      digitalWrite(entradaMotor2, HIGH);
+      moverMotoresIzquierda();
+      
       //cambio de estado
       q2=false;
       q3=true;
     }
     else if(q3){
       //me muevo a la izquierda
-      digitalWrite(entradaMotor1, LOW);
-      digitalWrite(entradaMotor2, HIGH);
+      moverMotoresIzquierda();
       
     }
     else if(q4){
       //me muevo a la izquierda
-      digitalWrite(entradaMotor1, LOW);
-      digitalWrite(entradaMotor2, HIGH);
+      moverMotoresIzquierda();
     }
     else if(q5){
       
-      //Extender el actuador
-      digitalWrite(forwards, LOW);
-      digitalWrite(backwards, HIGH);
-      delay(2000); // esperar 2 segundos
-      //Retraccion
-      digitalWrite(forwards, HIGH);
-      digitalWrite(backwards, LOW);
-      delay(2000);// esperar 2 segundos
+      activarActuador1();
       //moverme derecha
-      digitalWrite(entradaMotor1, HIGH);
-      digitalWrite(entradaMotor2, LOW);
+      moverMotoresDerecha();
       q5=false;
       q0=true;
     }
@@ -125,14 +121,12 @@ void loop() {
     if (q1){
       q1=false;
       q2=true;
-      digitalWrite(entradaMotor1, LOW);
-      digitalWrite(entradaMotor2, HIGH); // mover izquierda
+      moverMotoresIzquierda();
     }
     if(q4){
       q4=false;
       q5=true;
-      digitalWrite(entradaMotor1, HIGH);
-      digitalWrite(entradaMotor2, LOW); // mover derecha
+      moverMotoresDerecha();
     }
  }
 
@@ -141,22 +135,14 @@ void loop() {
     q2 = false;
     qf = true;
     //muevo izquierda
-    digitalWrite(entradaMotor1, LOW);
-    digitalWrite(entradaMotor2, HIGH);
+    moverMotoresIzquierda();
     //cambio de 0 a beta
     //Extender el actuador
-    digitalWrite(forwards, LOW);
-    digitalWrite(backwards, HIGH);
-    //retraccion
-    digitalWrite(forwards, HIGH);
-    digitalWrite(backwards, LOW);
+    activarActuador1();
  
  }
  if(qf){
-  digitalWrite(entradaMotor1, LOW);
-  digitalWrite(entradaMotor2, LOW);
-  digitalWrite(forwards, LOW);
-  digitalWrite(backwards, LOW);
+  Apagar();
   while(true); // detener el loop
 }
 
@@ -182,6 +168,53 @@ void calcularDistancia() {
   Serial.print("Distancia: ");
   Serial.print(d);
   Serial.println("cm");
+}
+void activarActuador1() {
+  digitalWrite(forwards1, LOW);
+  digitalWrite(backwards1, HIGH);
+  delay(500);
+  digitalWrite(forwards1, HIGH);
+  digitalWrite(backwards1, LOW);
+  delay(500);
+}
+void activarActuador2() {
+  digitalWrite(forwards2, LOW);
+  digitalWrite(backwards2, HIGH);
+  delay(500);
+  digitalWrite(forwards2, HIGH);
+  digitalWrite(backwards2, LOW);
+  delay(500);
 
+}
+void moverMotoresDerecha(){
+  //carrito 1
+  digitalWrite(entradaCarrito1Motor1, HIGH);
+  digitalWrite(entradaCarrito1Motor2, LOW);
+  //carrito 2
+  digitalWrite(entradaCarrito2Motor1, HIGH);
+  digitalWrite(entradaCarrito2Motor2, LOW);
+}
+void moverMotoresIzquierda(){
+  //carrito 1
+  digitalWrite(entradaCarrito1Motor1, LOW);
+  digitalWrite(entradaCarrito1Motor2, HIGH);
+  //carrito 2
+  digitalWrite(entradaCarrito2Motor1, LOW);
+  digitalWrite(entradaCarrito2Motor2, HIGH);
+}
+void Apagar(){
+  //carrito 1
+  digitalWrite(entradaCarrito1Motor1, LOW);
+  digitalWrite(entradaCarrito1Motor2, LOW);
+  //carrito 2
+  digitalWrite(entradaCarrito2Motor1, LOW);
+  digitalWrite(entradaCarrito2Motor2, LOW);
+
+  //Actuadores
+  digitalWrite(forwards1, LOW);
+  digitalWrite(backwards1, LOW);
+
+  digitalWrite(forwards2, LOW);
+  digitalWrite(backwards2, LOW);
 
 }
