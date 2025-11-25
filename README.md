@@ -77,7 +77,7 @@ El cabezal, compuesto por el sensor y los actuadores lineales, será montado en 
 
 ### Segundo Modelo 3D
 
-- Un carrito y sin riel
+- Sin riel
 
-  
+
 
