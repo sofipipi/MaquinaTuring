@@ -201,11 +201,18 @@ Dentro del loop() se ejecuta continuamente la lógica del autómata:
 ### e. Funciones
 
 ***CalcularDistancia***
-Aquí se emite un pulso de 10 μs y se mide el tiempo de retorno.
-El tiempo se convierte en distancia, representando el símbolo leído.
+
+* Aquí se emite un pulso de 10 μs y se mide el tiempo de retorno.
+* El tiempo se convierte en distancia, representando el símbolo leído.
+
 ***ActivarActuador1/ActivarActuador2***
-Simula la escritura sobre la cinta.
+
+* Simula la escritura sobre la cinta.
+
 ***MoverMotoresDerecha/Izquierda***
-Simula el movimiento del cabezal
+
+* Simula el movimiento del cabezal
+
 ***Apagar***
-Detiene todo al llegar al estado final.
+
+* Detiene todo al llegar al estado final.
