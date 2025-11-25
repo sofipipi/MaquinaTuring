@@ -73,11 +73,146 @@ El cabezal, compuesto por el sensor y los actuadores lineales, será montado en 
 
 - Dos carritos y rieles
   
-<img width="1066" height="565" alt="image" src="https://github.com/user-attachments/assets/c0d67259-6c3a-4a44-a5b6-93060e8e2663" />
+  <img width="1066" height="565" alt="image" src="https://github.com/user-attachments/assets/c0d67259-6c3a-4a44-a5b6-93060e8e2663" />
 
 ### Segundo Modelo 3D
 
 - Sin riel
+  
+  <img width="1290" height="1110" alt="image" src="https://github.com/user-attachments/assets/3b648a53-7081-43d0-b378-a752015359c7" />
 
+### Materiales para implementación física
 
+Los materiales a utilizar serían:
 
+- Arduino Uno
+- Protoboard
+- Jumpers
+- Relé de 4 canales o 2 de 2 canales
+- Driver L298N
+- 2 Motor DC
+- Sensor Ultrasónico
+- 2 actuadores lineales
+- Fuente voltaje 12 V
+
+## 4. Código Arduino para realizarlo en físico
+
+  ### a. Explicación General
+La “cinta” del autómata está representada por una serie de objetos ubicados a distintas distancias, medibles mediante un sensor ultrasónico HC-SR04, cada objeto representa un símbolo:
+
++ distanciaUno → símbolo 1
+
++ distanciaCero → símbolo 0
+
++ distanciaBeta → símbolo β (blanco / epsilon)
+
+_El “cabezal lector/escritor” se implementa combinando:_
+
+* Carritos motorizados → mover el cabezal izquierda/derecha
+
+* Actuadores lineales → “escribir” sobre la cinta (cambiar un símbolo)
+
+El autómata utiliza variables booleanas para representar su estado actual (q0, q1, q2,... ).
+La lógica del loop() ejecuta la transición de estados según el símbolo leído.
+
+### b. Declaración de pines y constantes
+**Actuadores Lineales**
+```
+const int forwards1 = 7;
+const int backwards1 = 6;
+
+const int forwards2 = 10;
+const int backwards2 = 11;
+```
+Cada actuador usa dos relés para invertir la polaridad, lo que permite:
+
+-extensión
+
+-retracción
+**Ultrasónido**
+```
+const int Trigger = 2;
+const int Echo = 3;
+long t;
+long d;
+```
+El sensor ultrasónico sirve como lector de cinta, midiendo la distancia al objeto y determinando qué símbolo representa.
+
+**Valores asignados a cada símbolo**
+
+```
+const int distanciaBeta= 8;
+const int distanciaUno= 2;
+const int distanciaCero= 4;
+```
+
+**Motores del cabezal**
+```
+int entradaCarrito1Motor1 = 4;
+int entradaCarrito1Motor2 = 5;
+
+int entradaCarrito2Motor1 = 8;
+int entradaCarrito2Motor2 = 9;
+```
+Controlan la dirección izquierda/derecha mediante un driver L298N.
+
+**Estados del Automata**
+```
+bool q0=true;
+bool q1=false;
+bool q2=false;
+bool q3=false;
+bool q4=false;
+bool q5=false;
+bool qf=false;
+
+```
+### c. Setup()
+El setup() inicializa los pines del sistema:
+
+* Configura actuadores como salida
+
+* Configura Trigger y Echo del ultrasónico
+
+* Inicializa los motores que mueven la cinta/cabezal
+  
+### d. Loop()
+
+Dentro del loop() se ejecuta continuamente la lógica del autómata:
+
+- Lectura del símbolo actual mediante calcularDistancia()
+
+- Determinación de transición según:
+
+    --> **estado actual**
+
+    --> **símbolo leído**
+
+-  Acciones físicas:
+
+    --> **mover cabezal a izquierda/derecha**
+
+    --> **“escribir” mediante actuadores**
+
+- Actualización de estado
+
+- Detención si se llega al estado final qf
+
+### e. Funciones
+
+***CalcularDistancia***
+
+* Aquí se emite un pulso de 10 μs y se mide el tiempo de retorno.
+* El tiempo se convierte en distancia, representando el símbolo leído.
+
+***ActivarActuador1/ActivarActuador2***
+
+* Simula la escritura sobre la cinta.
+
+***MoverMotoresDerecha/Izquierda***
+
+* Simula el movimiento del cabezal
+
+***Apagar***
+
+* Detiene todo al llegar al estado final.
