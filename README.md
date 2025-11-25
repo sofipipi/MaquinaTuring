@@ -1,46 +1,83 @@
-# MaquinaTuring
-Maquinita de turing
-Bitácora
+# Simulación Maquina de Turing
+**Integrantes:**
+> Sofía Contreras, 21702328-9
+> Máximo Jofré, 21675371-2
 
-## 07/09/2025 ##
-El integrante Máximo Jofré edita el documento de la fase 1 añadiendo contexto e introducción sobre máquinas de Turing.
-## 10/09/2025
-El integrante Máximo Jofré edita el documento añadiendo el autómata de Turing para lograr hacer el calculo de la suma de dos números de entre el 0 y el 9.
-## 11/09/2025
-La integrante Sofía Contreras edita el documento añadiendo autómata de Turing que permite hacer el calculo entre la resta de dos números de entre el 0 y 9.
-## 11/09/2025
-Máximo Jofré hace entrega de documento con autómatas de Turing de suma y resta para la posterior realización una simulación sobre máquinas de Turing.
-## 25/09/2025
-Máximo Jofré comienza el documento de propuesta de modelo de la maquina de Turing con una breve explicación de la idea.
-## 27/09/2025
-Sofía Contreras comienza a realizar el modelamiento 3D de la propuesta con la herramienta Tinkercad, se hacen cajas y figuras para acoplarlas luego.
-## 28/09/2025
-Máximo Jofré acopla las “cajas” en línea recta mientras Sofía Contreras acopla el carrito junto a una idea de protoboard con Arduino y ultrasonido.
-## 08/09/2025
-Máximo Jofré realiza dibujos con medidas exactas de cada parte de lo que sería el modelo 3D físico de la máquina.
-## 09/10/2025
-Entre ambos integrantes agregan imágenes con tanto el modelo 3D como los dibujos escaneados al documento para el entregable de la fase 2 
-## 10/10/2025
-Se discuten los materiales a utilizar, y finalmente Sofía Contreras los agrega al documento.
-Máximo Jofré realiza la entrega de documento con modelo 3D de diseño de máquina de Turing junto con dibujos de la misma, además de materiales estimados que se necesitan para lograr armarlo.
-## 22/10/2025
-Revisando nuevamente el modelo hecho y los materiales a utilizar ambos integrantes lo consideran inviable.
-## 24/10/2025
-Se anuncia que puede ser una simulación, por lo que los integrantes resuelven en utilizar el motor GODOT.
-## 30/10/2025
-Sofía Contreras comienza con traspasar la maqueta desde tinkercad a Godot para su posterior animación.
-## 02/11/2025
-Máximo Jofré intenta animar cada pieza
-## 13/11/2025
-Los integrantes discuten dada lo difícil de la implementación de la propuesta entregada en la fase 2, llegan al acuerdo de cambiarla.
-## 18/11/2025
-Máximo Jofré resuelve con comenzar la simulación del segundo modelo, dejando lista la cinta infinita.
-## 20/11/2025
-Sofía Contreras investiga los códigos de Arduino para implementarlo con actuadores lineales, con lo que se da cuenta que necesitarían un relé de 2 canales si se quisiera hacer físico. además, se añade la base de motor dc y ultrasonido.
-## 22/11/2025
-Máximo Jofré comienza y termina el cabezal en el modelo 3D.
-Sofía Contreras termina el autómata de sustracción en el código Arduino.
-## 25/11/2025
-Sofia Contreras termina el autómata de Suma.
-Máximo Jofré añade el “carrito” a la simulación, quedando lista.
+**Profesor:**
+> José Luis Veas Muñoz
+
+# Etapas del Proyecto
+
+## 1. Análisis Teórico
+
+Una máquina de Turing es un dispositivo abstracto para modelar el cálculo como manipulación mecánica de símbolos, mediante el uso de un cabezal que escribe y lee una cinta basándose en las reglas planteadas por el autómata.
+
+En una máquina de Turing la cinta, que es teóricamente infinita, es el medio donde se almacenan los datos que guiarán las transiciones de estados, en esta se trabaja con un ***alfabeto de 3 símbolos*** donde ***1 representa los números***, ***0 representa las operaciones*** y los ***espacios vacíos (beta)*** que sirven para delimitar las operaciones. 
+
+En la representación de los números del sistema decimal se utiliza una codificación unaria, que se refiere a la concatenación de n unos (1) para representar un número n. Por ejemplo, 1111, representa 4 y empleando una operación, 111011111, representa 3+5, 3-5, 3*5 o 3/5, dependiendo qué reglas siga el autómata.
+El uso de la codificación unaria simplifica la lógica de las operaciones, ya que la máquina sólo necesita reconocer tres símbolos, sin embargo, presenta la limitación de que requiere cintas muy largas para representar números grandes lo que la hace poco eficiente en la práctica, aunque muy útil para el análisis teórico y pedagógico.
+
+## 2. Definición del Automáta
+
+El autómata es una cantidad finita de estados por la cual pasará la máquina para poder realizar una operación, autómatas distintos realizan una operación específica. Para poder cambiar de estados se utilizan los datos escaneados por la máquina, cada estado tiene sus propias reglas para transicionar a otro estado según el dato recibido.
+Teniendo lo anterior en cuenta se definen los siguientes autómatas:
+### a. Operación Suma 
+
+*Estados*:
+- ***q0***: recorrer el primer número y al encontrar el primer 0 lo reemplaza por 1.
+- ***q1***: recorrer hasta encontrar un valor beta y retroceder 1 espacio.
+- ***q2***: se reemplaza el 1 por un Beta.
+- ***qf***: estado final para parar la máquina.
+  
+*Tabla*:
+| Estado | Beta | 0 | 1 |
+|---|---|---|---|
+| q0 | (q0/Beta, Derecha) | (q1/1, Derecha) | (q0/1,Derecha)|
+| q1 | (q2/Beta, Izquierda) | X | (q1/1,Derecha) |
+| q2 | X | X | (qf/Beta, Derecha) |
+| qf | X | X | X |
+### b. Operación Resta
+
+*Estados*:
+- ***q0***: avanza a la derecha siempre que lea 1, si lee “0”  continua al siguiente estado hacia la derecha
+- ***q1***: avanza a la derecha siempre que lea 1, en caso de leer beta avanza al siguiente estado con dirección a  la izquierda.
+- ***q2***: cambia de estado al encontrar 1 reemplazandolo por beta y moviéndose a la izquierda, en caso de encontrar 0 lo cambia a beta y se mueve a la izquierda terminando la operación
+- ***q3***: mientras lea 1 avanza a la izquierda y leído 0 cambia de estado moviéndose a la izquierda
+- ***q4***: se mantiene mientras lee 1 moviéndose a la izquierda, cambia al encontrar vacío moviéndose a la derecha.
+- ***q5***: Cambia el último 1 a beta y se mueve a la derecha volviendo al estado inicial.
+- ***qf***: estado final para parar la máquina.
+
+*Tabla*:
+| Estado | Beta | 0 | 1 |
+|---|---|---|---|
+| q0 | X | (q1/0, Derecha) | (q0/1,Derecha) |
+| q1 | (q2/Beta,Izquierda) | X | (q1/1,Derecha) |
+| q2 | (q3/Beta,Izquierda) | (qf/Beta,Izquierda) | (q3/1, Izquierda) |
+| q3 | X | (q4/0,Izquierda) | (q3/1,Izquierda) |
+| q4 | (q5/Beta,Derecha) | X | (q4/1,Izquierda) |
+| q5 | X | X | (q0/Beta,Derecha) |
+| qf | X | X | X |
+
+## 3. Propuesta de Diseño
+### Idea General
+
+Para la cinta de datos se utilizará una sucesión de contenedores con un bloque adentro, el cual se moverá horizontalmente en un solo eje para representar los datos, en este caso si el bloque está en lo más profundo del contenedor entonces representará un espacio vacío, al medio representa un 0 y al tope representará un 1. Esta cinta es estática.
+
+Para la lectura de estos datos se utilizará un sensor ultrasónico que mide distancia.
+
+Para la escritura se utilizarán actuadores lineales, uno por lado, para empujar el bloque que está en el contenedor.
+
+El cabezal, compuesto por el sensor y los actuadores lineales, será montado en un carro sobre un riel para su movilidad horizontal. Además de un riel adicional paralelo a este que tiene otro carro está compuesto de los mismos elementos menos el sensor.
+
+### Primer Modelo 3D
+
+- Dos carritos y rieles
+  
+<img width="1066" height="565" alt="image" src="https://github.com/user-attachments/assets/c0d67259-6c3a-4a44-a5b6-93060e8e2663" />
+
+### Segundo Modelo 3D
+
+- Sin riel
+
+
 
